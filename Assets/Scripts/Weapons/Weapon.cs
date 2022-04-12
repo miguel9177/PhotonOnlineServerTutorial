@@ -1,7 +1,4 @@
 using Photon.Pun;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace PhotonTutorial.Weapons
@@ -29,16 +26,15 @@ namespace PhotonTutorial.Weapons
         {
             //if the player hasnt clicked mouse button, leave this function
             if(!Input.GetMouseButtonDown(0)) { return; }
-            //this will call the function FireProjectile, on every pc on the server
-            photonView.RPC("FireProjectile", RpcTarget.All);
+            //since the user clicked the shooting button, call the function fire projectile, that is going to spawn a bullet on every player pc
+            FireProjectile();
         }
 
-        //this will run the code on the function bellow run on every computer of the server (inm this case we want to spawn this bullet in every pc, and move it accordingly
-        [PunRPC]
+    
         private void FireProjectile()
         {
             //this is going to spawn the bullet on every computer (since we are using PunRPC)
-            GameObject projectileInstance = Instantiate(projectile, spawnPoint.position, spawnPoint.rotation);
+            GameObject projectileInstance = PhotonNetwork.Instantiate(projectile.name, spawnPoint.position, spawnPoint.rotation);
             //this is going to add velocity to where the spawn bullet is facing, in this case is from the spawn point
             projectileInstance.GetComponent<Rigidbody>().velocity = projectileInstance.transform.forward * projectileSpeed;
         }
